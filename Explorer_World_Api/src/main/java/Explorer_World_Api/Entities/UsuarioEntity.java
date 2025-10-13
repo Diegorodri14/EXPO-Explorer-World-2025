@@ -36,7 +36,7 @@ public class UsuarioEntity {
     @Column(name = "CORREO")
     private String correo;
 
-    @Column(name = "IMAGE_URL", length = 500)
+    @Column(name = "image_url")
     private String image_url;
 
     @Override

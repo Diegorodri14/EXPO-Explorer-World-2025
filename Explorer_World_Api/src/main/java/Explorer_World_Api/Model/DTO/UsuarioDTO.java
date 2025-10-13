@@ -34,6 +34,5 @@ public class UsuarioDTO {
     @Size(max = 50, message = "El correo no puede exceder los 50 caracteres")
     private String correo;
 
-    @Column(name  = "IMAGE_URL")
     private String image_url;
 }

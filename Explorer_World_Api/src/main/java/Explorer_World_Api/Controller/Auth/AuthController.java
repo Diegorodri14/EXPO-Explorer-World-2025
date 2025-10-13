@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,26 +32,24 @@ public class AuthController {
     private JWTUtils jwtUtils;
 
     @PostMapping("/login")
-    private ResponseEntity<String> login(@Valid @RequestBody UsuarioDTO data, HttpServletResponse response){
+    private ResponseEntity<?> login(@Valid @RequestBody UsuarioDTO data, HttpServletResponse response){
         //1. Verificar que los datos no esten vacios
         if (data.getCorreo() == null || data.getCorreo().isBlank() ||
                 data.getContrasena() == null || data.getContrasena().isBlank())  {
             return ResponseEntity.status(401).body("Error: Credenciales incompletas");
         }
+
         //Enviar los datos al metodo login contenido en el service
         if(service.Login(data.getCorreo(), data.getContrasena())){
-            addTokenCookie(response, data.getCorreo());
-            return ResponseEntity.ok("Inicio de sesión exitoso");
+            return addTokenCookieAndResponse(response, data.getCorreo());
         }
         return ResponseEntity.status(401).body("Credenciales incorrectas");
     }
 
     /**
-     * Se genera el token y se guarda en la Cookie
-     * @param response
-     * @param
+     * Se genera el token y se devuelve en JSON
      */
-    private void addTokenCookie(HttpServletResponse response, String correo) {
+    private ResponseEntity<?> addTokenCookieAndResponse(HttpServletResponse response, String correo) {
         // Obtener el usuario completo de la base de datos
         Optional<UsuarioEntity> userOpt = service.obtenerUsuario(correo);
 
@@ -59,16 +58,34 @@ public class AuthController {
             String token = jwtUtils.create(
                     String.valueOf(user.getIdUsuario()),
                     user.getCorreo(),
-                    user.getRangoUsuario().getNombreRango() // ← Usar el nombre real del tipo
+                    user.getRangoUsuario().getNombreRango()
             );
 
+            // Crear cookie
             Cookie cookie = new Cookie("authToken", token);
             cookie.setHttpOnly(true);
-            cookie.setSecure(true);
+            cookie.setSecure(false); // Cambia a true en producción
             cookie.setPath("/");
             cookie.setMaxAge(86400);
             response.addCookie(cookie);
+
+            // Crear respuesta JSON
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("token", token);
+            responseBody.put("message", "Inicio de sesión exitoso");
+            responseBody.put("usuario", Map.of(
+                    "idUsuario", user.getIdUsuario(),
+                    "usuario", user.getUsuario(),
+                    "correo", user.getCorreo(),
+                    "estado", user.getEstado(),
+                    "idRango", user.getRangoUsuario().getIdRango(), // Ajusta según tu entidad
+                    "rol", user.getRangoUsuario().getNombreRango()
+            ));
+
+            return ResponseEntity.ok(responseBody);
         }
+
+        return ResponseEntity.status(404).body("Usuario no encontrado");
     }
 
     @GetMapping("/me")
@@ -121,7 +138,6 @@ public class AuthController {
             ));
 
         } catch (Exception e) {
-            //log.error("Error en /me endpoint: ", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of(
                             "authenticated", false,
