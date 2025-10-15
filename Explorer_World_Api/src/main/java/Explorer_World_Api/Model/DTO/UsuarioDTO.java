@@ -33,6 +33,4 @@ public class UsuarioDTO {
     @Email(message = "Debe ser un correo electrónico válido")
     @Size(max = 50, message = "El correo no puede exceder los 50 caracteres")
     private String correo;
-
-    private String image_url;
 }

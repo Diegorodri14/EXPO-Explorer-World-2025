@@ -72,7 +72,6 @@ public class UsuarioService {
         entity.setUsuario(data.getUsuario());
         entity.setContrasena(data.getContrasena());
         entity.setCorreo(data.getCorreo());
-        entity.setImage_url(data.getImage_url());
         return entity;
     }
     /**
@@ -88,7 +87,6 @@ public class UsuarioService {
         dto.setUsuario(usuarioEntity.getUsuario());
         dto.setContrasena(usuarioEntity.getContrasena());
         dto.setCorreo(usuarioEntity.getCorreo());
-        dto.setImage_url(usuarioEntity.getImage_url());
         return dto;
     }
 
@@ -99,7 +97,6 @@ public class UsuarioService {
         existente.setUsuario(json.getUsuario());
         existente.setContrasena(json.getContrasena());
         existente.setCorreo(json.getCorreo());
-        existente.setImage_url(json.getImage_url());
 
         UsuarioEntity usuarioActualizado = repo.save(existente);
         return convertirADTO(usuarioActualizado);

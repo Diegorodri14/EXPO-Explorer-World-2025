@@ -47,6 +47,4 @@ public class EmpleadoEntity {
     @Column(name = "SALARIO", precision = 10, scale = 2)
     private BigDecimal salario;
 
-    @Column(name = "IMAGE_URL", length = 500)
-    private String image_url;
 }

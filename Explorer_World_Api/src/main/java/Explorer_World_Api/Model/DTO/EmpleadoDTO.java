@@ -44,6 +44,4 @@ public class EmpleadoDTO {
     @DecimalMin(value = "0.0", message = "El salario no puede ser negativo")
     private BigDecimal salario;
 
-    @NotBlank
-    private String image_url;
 }

@@ -156,33 +156,4 @@ public class UsuarioController {
             ));
         }
     }
-
-    @PostMapping("/{id}/upload-image")
-    public ResponseEntity<?> uploadImageToEmpleados(
-            @PathVariable Long id,
-            @RequestParam("image") MultipartFile file
-    ) {
-        try {
-            UsuarioEntity usuario = usuarioRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("usuario no encontrado"));
-
-            // Subir imagen a la carpeta "UsuariosExpo"
-            String imageUrl = cloudinaryService.uploadImage(file, "UsuariosExpo");
-
-            usuario.setImage_url(imageUrl);
-            usuarioRepository.save(usuario);
-
-            return ResponseEntity.ok(Map.of(
-                    "message", "Imagen subida y asociada al usuario exitosamente",
-                    "url", imageUrl
-            ));
-        } catch (IOException e) {
-            e.printStackTrace(); // Esto imprime la traza completa en la consola
-            return ResponseEntity.internalServerError()
-                    .body("Error al subir la imagen: " + e.getMessage());
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body("Archivo inválido: " + e.getMessage());
-        }
-    }
 }

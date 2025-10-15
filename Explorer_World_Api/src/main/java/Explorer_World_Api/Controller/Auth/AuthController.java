@@ -33,17 +33,31 @@ public class AuthController {
 
     @PostMapping("/login")
     private ResponseEntity<?> login(@Valid @RequestBody UsuarioDTO data, HttpServletResponse response){
+        System.out.println("=== INICIO LOGIN ===");
+        System.out.println("Correo recibido: " + data.getCorreo());
+
         //1. Verificar que los datos no esten vacios
         if (data.getCorreo() == null || data.getCorreo().isBlank() ||
                 data.getContrasena() == null || data.getContrasena().isBlank())  {
+            System.out.println("ERROR: Credenciales vacías");
             return ResponseEntity.status(401).body("Error: Credenciales incompletas");
         }
 
-        //Enviar los datos al metodo login contenido en el service
-        if(service.Login(data.getCorreo(), data.getContrasena())){
-            return addTokenCookieAndResponse(response, data.getCorreo());
+        try {
+            //Enviar los datos al metodo login contenido en el service
+            boolean loginSuccess = service.Login(data.getCorreo(), data.getContrasena());
+            System.out.println("Resultado login: " + loginSuccess);
+
+            if(loginSuccess){
+                return addTokenCookieAndResponse(response, data.getCorreo());
+            }
+            System.out.println("Login fallido - credenciales incorrectas");
+            return ResponseEntity.status(401).body("Credenciales incorrectas");
+        } catch (Exception e) {
+            System.out.println("EXCEPCIÓN en login: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Error interno del servidor");
         }
-        return ResponseEntity.status(401).body("Credenciales incorrectas");
     }
 
     /**

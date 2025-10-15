@@ -78,7 +78,6 @@ public class EmpleadoService {
         entity.setTelefono(data.getTelefono());
         entity.setDireccion(data.getDireccion());
         entity.setSalario(data.getSalario());
-        entity.setImage_url(data.getImage_url());
         return entity;
     }
 
@@ -99,7 +98,6 @@ public class EmpleadoService {
         dto.setTelefono(entity.getTelefono());
         dto.setDireccion(entity.getDireccion());
         dto.setSalario(entity.getSalario());
-        dto.setImage_url(entity.getImage_url());
         return dto;
     }
 
@@ -115,8 +113,6 @@ public class EmpleadoService {
         existente.setTelefono(json.getTelefono());
         existente.setDireccion(json.getDireccion());
         existente.setSalario(json.getSalario());
-        existente.setImage_url(json.getImage_url());
-
         EmpleadoEntity actualizado = repo.save(existente);
         return ConvertirADTO(actualizado);
     }

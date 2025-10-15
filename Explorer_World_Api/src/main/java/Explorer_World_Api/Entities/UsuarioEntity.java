@@ -36,8 +36,7 @@ public class UsuarioEntity {
     @Column(name = "CORREO")
     private String correo;
 
-    @Column(name = "image_url")
-    private String image_url;
+
 
     @Override
     public String toString() {
@@ -48,7 +47,6 @@ public class UsuarioEntity {
                 ", usuario='" + usuario + '\'' +
                 ", contrasena='" + contrasena + '\'' +
                 ", correo='" + correo + '\'' +
-                ", image_url='" + image_url + '\'' +
                 '}';
     }
 }

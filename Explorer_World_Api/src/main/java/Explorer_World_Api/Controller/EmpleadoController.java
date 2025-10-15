@@ -158,32 +158,5 @@ public class EmpleadoController {
         }
     }
 
-    @PostMapping("/{id}/upload-image")
-    public ResponseEntity<?> uploadImageToEmpleados(
-            @PathVariable Long id,
-            @RequestParam("image") MultipartFile file
-    ) {
-        try {
-            EmpleadoEntity empleado = empleadoRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
 
-            // Subir imagen a la carpeta "EmpleadosExpo"
-            String imageUrl = cloudinaryService.uploadImage(file, "EmpleadosExpo");
-
-            empleado.setImage_url(imageUrl);
-            empleadoRepository.save(empleado);
-
-            return ResponseEntity.ok(Map.of(
-                    "message", "Imagen subida y asociada al empleado exitosamente",
-                    "url", imageUrl
-            ));
-        } catch (IOException e) {
-            e.printStackTrace(); // Esto imprime la traza completa en la consola
-            return ResponseEntity.internalServerError()
-                    .body("Error al subir la imagen: " + e.getMessage());
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body("Archivo inválido: " + e.getMessage());
-        }
-    }
 }

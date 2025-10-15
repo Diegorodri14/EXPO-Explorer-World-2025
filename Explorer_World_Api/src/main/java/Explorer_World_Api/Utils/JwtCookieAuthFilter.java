@@ -22,11 +22,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
-/**
- * Filtro se ejecuta una vez por cada solicitud HTTP
- * Componente gestionado por Spring
- */
 @Component
 public class JwtCookieAuthFilter extends OncePerRequestFilter {
 
@@ -45,8 +42,11 @@ public class JwtCookieAuthFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
 
-        // CORREGIDO: Mejor lógica para endpoints públicos
-        if (isPublicEndpoint(request)) {
+        // Permitir todos los endpoints de la API sin autenticación
+        String path = request.getRequestURI();
+
+        // Lista de endpoints públicos
+        if (isPublicEndpoint(path, request.getMethod())) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -54,35 +54,37 @@ public class JwtCookieAuthFilter extends OncePerRequestFilter {
         try {
             String token = extractTokenFromCookies(request);
 
+            // Si no hay token y es un endpoint protegido, rechazar
             if (token == null || token.isBlank()) {
-                // Para endpoints no públicos, requerimos token
-                if (!isPublicEndpoint(request)) {
-                    sendError(response, "Token no encontrado", HttpServletResponse.SC_UNAUTHORIZED);
-                    return;
-                }
-                filterChain.doFilter(request, response);
+                log.warn("Token no encontrado para endpoint: {}", path);
+                sendError(response, "Token no encontrado", HttpServletResponse.SC_UNAUTHORIZED);
+                return;
+            }
+
+            // Validar token
+            if (!jwtUtils.validate(token)) {
+                log.warn("Token inválido para endpoint: {}", path);
+                sendError(response, "Token inválido", HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
 
             Claims claims = jwtUtils.parseToken(token);
-
-            // EXTRAER EL ROL REAL del token
             String rol = jwtUtils.extractRol(token);
 
-            // CREAR AUTHORITIES BASADO EN EL ROL REAL
+            // Crear authorities
             Collection<? extends GrantedAuthority> authorities =
                     Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + rol));
 
-            // CREAR AUTENTICACIÓN CON AUTHORITIES CORRECTOS
+            // Establecer autenticación
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(
-                            claims.getSubject(), // username
-                            null, // credentials
-                            authorities // ← ROLES REALES
+                            claims.getSubject(),
+                            null,
+                            authorities
                     );
 
-            // ESTABLECER AUTENTICACIÓN EN CONTEXTO
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            log.info("Usuario autenticado: {} con rol: {}", claims.getSubject(), rol);
 
             filterChain.doFilter(request, response);
 
@@ -100,7 +102,14 @@ public class JwtCookieAuthFilter extends OncePerRequestFilter {
 
     private String extractTokenFromCookies(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
-        if (cookies == null) return null;
+        if (cookies == null) {
+            // Intentar obtener token del header Authorization como fallback
+            String authHeader = request.getHeader("Authorization");
+            if (authHeader != null && authHeader.startsWith("Bearer ")) {
+                return authHeader.substring(7);
+            }
+            return null;
+        }
 
         return Arrays.stream(cookies)
                 .filter(c -> AUTH_COOKIE_NAME.equals(c.getName()))
@@ -113,17 +122,27 @@ public class JwtCookieAuthFilter extends OncePerRequestFilter {
         response.setContentType("application/json");
         response.setStatus(status);
         response.getWriter().write(String.format(
-                "{\"error\": \"%s\", \"status\": %d}", message, status));
+                "{\"error\": \"%s\", \"status\": %d, \"message\": \"%s\"}", message, status, message));
     }
 
-    // MEJORADA: Lógica para endpoints públicos
-    private boolean isPublicEndpoint(HttpServletRequest request) {
-        String path = request.getRequestURI();
-        String method = request.getMethod();
-
+    private boolean isPublicEndpoint(String path, String method) {
         // Endpoints públicos
-        return (path.equals("/api/auth/login") && "POST".equals(method)) ||
-                (path.equals("/api/auth/register") && "POST".equals(method)) ||
-                (path.equals("/api/public/") && "GET".equals(method));
+        List<String> publicEndpoints = Arrays.asList(
+                "/api/auth/login",
+                "/api/auth/register",
+                "/api/auth/logout",
+                "/error",
+                "/favicon.ico"
+        );
+
+        // Permitir OPTIONS para CORS
+        if ("OPTIONS".equals(method)) {
+            return true;
+        }
+
+        // Verificar si el path coincide exactamente con algún endpoint público
+        return publicEndpoints.stream().anyMatch(endpoint ->
+                path.equals(endpoint) || path.startsWith(endpoint + "/")
+        );
     }
 }

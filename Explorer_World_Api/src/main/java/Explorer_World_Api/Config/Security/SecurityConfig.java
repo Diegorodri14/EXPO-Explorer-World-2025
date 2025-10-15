@@ -36,64 +36,65 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/logout").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
                         .requestMatchers("/api/auth/me").authenticated()
 
                         // ENDPOINTS DE USUARIO
                         .requestMatchers(HttpMethod.GET, "/apiUsuario/ListaUsuario").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/apiUsuario/registrarUsario").hasAuthority("ROLE_admin")
-                        .requestMatchers(HttpMethod.PUT, "/apiUsuario/editarUsuario/{id}").hasAuthority("ROLE_admin")
-                        .requestMatchers(HttpMethod.DELETE, "/apiUsuario/eliminarBoleto/{id}").hasAuthority("ROLE_admin")
+                        .requestMatchers(HttpMethod.POST, "/apiUsuario/registrarUsario").hasAuthority("ROLE_Administrador")
+                        .requestMatchers(HttpMethod.PUT, "/apiUsuario/editarUsuario/{id}").hasAuthority("ROLE_Administrador")
+                        .requestMatchers(HttpMethod.DELETE, "/apiUsuario/eliminarBoleto/{id}").hasAuthority("ROLE_Administrador")
 
                         // ENDPOINTS DE EMPLEADO
                         .requestMatchers(HttpMethod.GET, "/ApiEmpleado/ListaEmpleado").authenticated()
                         .requestMatchers(HttpMethod.GET, "/ApiEmpleado/consultarEmpleado").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/ApiEmpleado/registrarEmpleado").hasAuthority("ROLE_admin")
-                        .requestMatchers(HttpMethod.PUT, "/ApiEmpleado/editarEmpleado/{id}").hasAuthority("ROLE_admin")
-                        .requestMatchers(HttpMethod.DELETE, "/ApiEmpleado/eliminarEmpleado/{id}").hasAuthority("ROLE_admin")
-                        .requestMatchers(HttpMethod.POST, "/ApiEmpleado/{id}/upload-image").hasAuthority("ROLE_admin")
+                        .requestMatchers(HttpMethod.POST, "/ApiEmpleado/registrarEmpleado").hasAuthority("ROLE_Administrador")
+                        .requestMatchers(HttpMethod.PUT, "/ApiEmpleado/editarEmpleado/{id}").hasAuthority("ROLE_Administrador")
+                        .requestMatchers(HttpMethod.DELETE, "/ApiEmpleado/eliminarEmpleado/{id}").hasAuthority("ROLE_Administrador")
+                        .requestMatchers(HttpMethod.POST, "/ApiEmpleado/{id}/upload-image").hasAuthority("ROLE_Administrador")
 
                         // ENDPOINTS DE VIAJES
                         .requestMatchers(HttpMethod.GET, "/ApiViajes/ListaViajes").authenticated()
                         .requestMatchers(HttpMethod.GET, "/ApiViajes/consultarViaje").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/ApiViajes/registrarViaje").hasAuthority("ROLE_admin")
-                        .requestMatchers(HttpMethod.PUT, "/ApiViajes/editarViaje/{id}").hasAuthority("ROLE_admin")
-                        .requestMatchers(HttpMethod.DELETE, "/ApiViajes/eliminarViaje/{id}").hasAuthority("ROLE_admin")
+                        .requestMatchers(HttpMethod.POST, "/ApiViajes/registrarViaje").hasAuthority("ROLE_Administrador")
+                        .requestMatchers(HttpMethod.PUT, "/ApiViajes/editarViaje/{id}").hasAuthority("ROLE_Administrador")
+                        .requestMatchers(HttpMethod.DELETE, "/ApiViajes/eliminarViaje/{id}").hasAuthority("ROLE_Administrador")
 
                         // ENDPOINTS DE DESTINOS
                         .requestMatchers(HttpMethod.GET, "/ApiDestinos/ListaDestino").authenticated()
                         .requestMatchers(HttpMethod.GET, "/ApiDestinos/consultarDestinos").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/ApiDestinos/registrarDestinos").hasAuthority("ROLE_admin")
-                        .requestMatchers(HttpMethod.PUT, "/ApiDestinos/editarDestino/{id}").hasAuthority("ROLE_admin")
-                        .requestMatchers(HttpMethod.DELETE, "/ApiDestinos/eliminarDestino/{id}").hasAuthority("ROLE_admin")
-                        .requestMatchers(HttpMethod.POST, "/ApiDestinos/{id}/upload-image").hasAuthority("ROLE_admin")
+                        .requestMatchers(HttpMethod.POST, "/ApiDestinos/registrarDestinos").hasAuthority("ROLE_Administrador")
+                        .requestMatchers(HttpMethod.PUT, "/ApiDestinos/editarDestino/{id}").hasAuthority("ROLE_Administrador")
+                        .requestMatchers(HttpMethod.DELETE, "/ApiDestinos/eliminarDestino/{id}").hasAuthority("ROLE_Administrador")
+                        .requestMatchers(HttpMethod.POST, "/ApiDestinos/{id}/upload-image").hasAuthority("ROLE_Administrador")
 
                         // ENDPOINTS DE FACTURAS
                         .requestMatchers(HttpMethod.GET, "/ApiFacturas/ListaFactura").authenticated()
                         .requestMatchers(HttpMethod.GET, "/ApiFacturas/consultarFactura").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/ApiFacturas/registrarFactura").hasAuthority("ROLE_admin")
-                        .requestMatchers(HttpMethod.PUT, "/ApiFacturas/editarFactura/{id}").hasAuthority("ROLE_admin")
-                        .requestMatchers(HttpMethod.DELETE, "/ApiFacturas/eliminarFactura/{id}").hasAuthority("ROLE_admin")
+                        .requestMatchers(HttpMethod.POST, "/ApiFacturas/registrarFactura").hasAuthority("ROLE_Administrador")
+                        .requestMatchers(HttpMethod.PUT, "/ApiFacturas/editarFactura/{id}").hasAuthority("ROLE_Administrador")
+                        .requestMatchers(HttpMethod.DELETE, "/ApiFacturas/eliminarFactura/{id}").hasAuthority("ROLE_Administrador")
 
                         // ENDPOINTS DE RESERVACIONES
                         .requestMatchers(HttpMethod.GET, "/ApiReservaciones/ListaReservaciones").authenticated()
                         .requestMatchers(HttpMethod.GET, "/ApiReservaciones/ObtenerReservacion").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/ApiReservaciones/AgregarReservacion").hasAuthority("ROLE_admin")
-                        .requestMatchers(HttpMethod.PUT, "/ApiReservaciones/EditarReservacion/{id}").hasAuthority("ROLE_admin")
-                        .requestMatchers(HttpMethod.DELETE, "/ApiReservaciones/EliminarReservacion/{id}").hasAuthority("ROLE_admin")
+                        .requestMatchers(HttpMethod.POST, "/ApiReservaciones/AgregarReservacion").hasAuthority("ROLE_Administrador")
+                        .requestMatchers(HttpMethod.PUT, "/ApiReservaciones/EditarReservacion/{id}").hasAuthority("ROLE_Administrador")
+                        .requestMatchers(HttpMethod.DELETE, "/ApiReservaciones/EliminarReservacion/{id}").hasAuthority("ROLE_Administrador")
 
                         // ENDPOINTS DE SERVICIOS
                         .requestMatchers(HttpMethod.GET, "/ApiServicios/ListaServicios").authenticated()
                         .requestMatchers(HttpMethod.GET, "/ApiServicios/consultarServicio").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/ApiServicios/registrarServicio").hasAuthority("ROLE_admin")
-                        .requestMatchers(HttpMethod.PUT, "/ApiServicios/editarServicio/{id}").hasAuthority("ROLE_admin")
-                        .requestMatchers(HttpMethod.DELETE, "/ApiServicios/eliminarServicio/{id}").hasAuthority("ROLE_admin")
+                        .requestMatchers(HttpMethod.POST, "/ApiServicios/registrarServicio").hasAuthority("ROLE_Administrador")
+                        .requestMatchers(HttpMethod.PUT, "/ApiServicios/editarServicio/{id}").hasAuthority("ROLE_Administrador")
+                        .requestMatchers(HttpMethod.DELETE, "/ApiServicios/eliminarServicio/{id}").hasAuthority("ROLE_Administrador")
 
                         // ENDPOINTS DE CLIENTES
                         .requestMatchers(HttpMethod.GET, "/ApiCliente/ListaClientes").authenticated()
                         .requestMatchers(HttpMethod.GET, "/ApiCliente/consultarCliente").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/ApiCliente/registrarCliente").hasAuthority("ROLE_admin")
-                        .requestMatchers(HttpMethod.PUT, "/ApiCliente/editarCliente/{id}").hasAuthority("ROLE_admin")
-                        .requestMatchers(HttpMethod.DELETE, "/ApiCliente/eliminarCliente/{id}").hasAuthority("ROLE_admin")
+                        .requestMatchers(HttpMethod.POST, "/ApiCliente/registrarCliente").hasAuthority("ROLE_Administrador")
+                        .requestMatchers(HttpMethod.PUT, "/ApiCliente/editarCliente/{id}").hasAuthority("ROLE_Administrador")
+                        .requestMatchers(HttpMethod.DELETE, "/ApiCliente/eliminarCliente/{id}").hasAuthority("ROLE_Administrador")
 
                         .anyRequest().authenticated())
                 .sessionManagement(sess -> sess
@@ -107,10 +108,11 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowCredentials(true);
-        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
+        configuration.setAllowedOriginPatterns(Arrays.asList("http://localhost:*", "http://127.0.0.1:*", "*"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setExposedHeaders(Arrays.asList("Authorization"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept", "X-Requested-With"));
+        configuration.setExposedHeaders(Arrays.asList("Authorization", "Content-Disposition"));
+        configuration.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
