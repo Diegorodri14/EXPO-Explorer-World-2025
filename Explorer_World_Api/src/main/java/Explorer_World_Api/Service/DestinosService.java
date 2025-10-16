@@ -73,7 +73,6 @@ public class DestinosService {
         entity.setLugarDestino(data.getLugarDestino());
         entity.setTipoDestino(data.getTipoDestino());
         entity.setDescripcionDestino(data.getDescripcionDestino());
-        entity.setImage_url(data.getImage_url());
         return entity;
     }
 
@@ -90,7 +89,6 @@ public class DestinosService {
         dto.setLugarDestino(entity.getLugarDestino());
         dto.setTipoDestino(entity.getTipoDestino());
         dto.setDescripcionDestino(entity.getDescripcionDestino());
-        dto.setImage_url(entity.getImage_url());
         return dto;
     }
 
@@ -102,7 +100,6 @@ public class DestinosService {
         existente.setLugarDestino(json.getLugarDestino());
         existente.setTipoDestino(json.getTipoDestino());
         existente.setDescripcionDestino(json.getDescripcionDestino());
-        existente.setImage_url(json.getImage_url());
 
         DestinosEntity actualizado = repo.save(existente);
         return ConvertirADTO(actualizado);

@@ -20,7 +20,7 @@ public class ReservacionesEntity {
     @Column(name = "IDRESERVACION")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sq_Reservaciones")
     @SequenceGenerator(name = "sq_Reservaciones", sequenceName = "sq_Reservaciones", allocationSize = 1)
-    private Long idReservacion;
+    private Long IdReservacion;
 
     @Column(name = "IDCLIENTE")
     private Long IdCliente;
@@ -32,7 +32,7 @@ public class ReservacionesEntity {
     private String TipoReservacion;
 
     @Column(name = "nombreViaje")
-    private String NombreViaje;
+    private String Nombre_Viaje;
 
     @Column(name = "DETALLEDERESERVACION")
     private String DetallesDeReservacion;
@@ -43,5 +43,8 @@ public class ReservacionesEntity {
 
     @Column(name = "PERSONAS")
     private Long Personas;
+
+    @Column(name = "ESTADORESERVACION")
+    private String EstadoReservacion;
 
 }

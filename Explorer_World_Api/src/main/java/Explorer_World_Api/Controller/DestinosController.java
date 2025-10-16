@@ -155,36 +155,4 @@ public class DestinosController {
             ));
         }
     }
-
-    @PostMapping("/{id}/upload-image")
-    public ResponseEntity<?> uploadImageToDestino(
-            @PathVariable Long id,
-            @RequestParam("image") MultipartFile file
-    ) {
-        try {
-            DestinosEntity destino = destinosRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Destino no encontrado"));
-
-            // Subir imagen a la carpeta "DestinosExpo"
-            String imageUrl = cloudinaryService.uploadImage(file, "DestinosExpo");
-
-            destino.setImage_url(imageUrl);
-            destinosRepository.save(destino);
-
-            return ResponseEntity.ok(Map.of(
-                    "message", "Imagen subida y asociada al destino exitosamente",
-                    "url", imageUrl
-            ));
-        } catch (IOException e) {
-            e.printStackTrace(); // Esto imprime la traza completa en la consola
-            return ResponseEntity.internalServerError()
-                    .body("Error al subir la imagen: " + e.getMessage());
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body("Archivo inválido: " + e.getMessage());
-        }
-    }
-
-
-
 }

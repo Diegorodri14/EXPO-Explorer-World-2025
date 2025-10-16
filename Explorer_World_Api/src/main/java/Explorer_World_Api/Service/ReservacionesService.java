@@ -74,10 +74,11 @@ public class ReservacionesService {
         entity.setIdCliente(data.getIdCliente());
         entity.setNombreCliente(data.getNombreCliente());
         entity.setTipoReservacion(data.getTipoReservacion());
-        entity.setNombreViaje(data.getNombreViaje());
+        entity.setNombre_Viaje(data.getNombre_Viaje());
         entity.setDetallesDeReservacion(data.getDetallesDeReservacion());
         entity.setFechaReservacion(data.getFechaReservacion());
         entity.setPersonas(data.getPersonas());
+        entity.setEstadoReservacion(data.getEstadoReservacion());
 
         return entity;
     }
@@ -95,10 +96,11 @@ public class ReservacionesService {
         dto.setIdCliente(reservacionesEntity.getIdCliente());
         dto.setNombreCliente(reservacionesEntity.getNombreCliente());
         dto.setTipoReservacion(reservacionesEntity.getTipoReservacion());
-        dto.setNombreViaje(reservacionesEntity.getNombreViaje());
+        dto.setNombre_Viaje(reservacionesEntity.getNombre_Viaje());
         dto.setDetallesDeReservacion(reservacionesEntity.getDetallesDeReservacion());
         dto.setFechaReservacion(reservacionesEntity.getFechaReservacion());
         dto.setPersonas(reservacionesEntity.getPersonas());
+        dto.setEstadoReservacion(reservacionesEntity.getEstadoReservacion());
         return dto;
     }
 
@@ -109,10 +111,11 @@ public class ReservacionesService {
         existente.setIdCliente(json.getIdCliente());
         existente.setNombreCliente(json.getNombreCliente());
         existente.setTipoReservacion(json.getTipoReservacion());
-        existente.setNombreViaje(json.getNombreViaje());
+        existente.setNombre_Viaje(json.getNombre_Viaje());
         existente.setDetallesDeReservacion(json.getDetallesDeReservacion());
         existente.setFechaReservacion(json.getFechaReservacion());
         existente.setPersonas(json.getPersonas());
+        existente.setEstadoReservacion(json.getEstadoReservacion());
 
         ReservacionesEntity actualizado = repo.save(existente);
         return ConvertirADTO(actualizado);
